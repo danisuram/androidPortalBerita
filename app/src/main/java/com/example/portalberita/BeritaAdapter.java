@@ -1,6 +1,7 @@
 package com.example.portalberita;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +36,32 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BeritaAdapter.ViewHolder holder, int position) {
-        holder.itemPenulis.setText(listBerita.get(position).getPenulisBerita());
-        holder.itemJudul.setText(listBerita.get(position).getJudulBerita());
 
-        String urlImage = "http://192.168.86.45:8888/portal_berita/image/" + listBerita.get(position).getImageBerita();
+        final String penulis = listBerita.get(position).getPenulisBerita();
+        final String judul = listBerita.get(position).getJudulBerita();
+        final String gambar =  listBerita.get(position).getImageBerita();
+        final String berita = listBerita.get(position).getIsiBerita();
+
+        holder.itemPenulis.setText(penulis);
+        holder.itemJudul.setText(judul);
+
+        String urlImage = "http://192.168.86.45:8888/portal_berita/image/" + gambar;
 
         Glide.with(context).load(urlImage).into(holder.itemImage);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailActivity.class);
+
+                intent.putExtra(DetailActivity.KEY_PENULIS, penulis);
+                intent.putExtra(DetailActivity.KEY_GAMBAR, gambar);
+                intent.putExtra(DetailActivity.KEY_BERITA, berita);
+                intent.putExtra(DetailActivity.KEY_JUDUL, judul);
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
